@@ -9,16 +9,38 @@ services:
       - .:/code
     depends_on:
       - db
+    entrypoint:
+      - bash
+      - -c
+      - |
+        echo -e "
+        import MySQLdb as mysql \n
+        from time import sleep \n
+        import os \n
+        count = 0 \n
+        while count < 10: \n
+          try: \n
+            print('Try to connect') \n
+            cnx = mysql.connect(user='developer', database='mephi', password='1234', host='db') \n
+            print(cnx.ping()) \n
+            cnx.close() \n
+            count = 10 \n
+          except Exception as e: \n
+            print(e) \n
+            sleep(2) \n
+          count += 1 \n
+        print('All right. We are in.') \n
+        os.system('python manage.py runserver 0.0.0.0:8000') \n" | python
   db:
     image: mysql:5.7
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports:
       - "3306:3306"
-    volumes:
-      - ./db:/docker-entrypoint-initdb.d
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
       MYSQL_USER: developer
       MYSQL_PASSWORD: 1234
       MYSQL_DATABASE: mephi
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
