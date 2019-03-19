@@ -70,17 +70,24 @@ TEMPLATES = [
 WSGI_APPLICATION = 'banners.wsgi.application'
 
 
+# Test runner
+TEST_RUNNER = 'xmlrunner.extra.djangotestrunner.XMLTestRunner'
+TEST_OUTPUT_VERBOSE = True
+TEST_OUTPUT_FILE_NAME = "unittest.xml"
+TEST_OUTPUT_DIR = os.environ.get('TEST_OUTPUT_DIR', '/code/')
+
+
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mephi',
-        'USER': 'developer',
-        'PASSWORD': '1234',
-        'HOST': 'db',
-        'PORT': '3306',
+        'NAME': os.environ.get('BANNERS_DATABASE_NAME', 'mephi'),
+        'USER': os.environ.get('BANNERS_DATABASE_USER', 'developer'),
+        'PASSWORD': os.environ.get('BANNERS_DATABASE_PASSWORD', '1234'),
+        'HOST': os.environ.get('BANNERS_DATABASE_HOST', 'db'),
+        'PORT': os.environ.get('BANNERS_DATABASE_PORT', '3306'),
     }
 }
 
@@ -90,16 +97,20 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation' +
+        '.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation' +
+        '.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation' +
+        '.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation' +
+        '.NumericPasswordValidator',
     },
 ]
 
